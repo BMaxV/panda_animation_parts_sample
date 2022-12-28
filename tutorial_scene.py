@@ -29,22 +29,53 @@ class Wrapper:
         # Add the spinCameraTask procedure to the task manager.
         self.b.taskMgr.add(self.spinCameraTask, "SpinCameraTask")
         
+        #regular panda
+        
+        regular_panda = Actor('panda-model', {
+                            'walk': 'panda-walk4',
+                            })
+                            
+        regular_panda.reparentTo(self.b.render)
+        regular_panda.loop("walk")
+        regular_panda.setPos(2,0,0)
+        regular_panda.setScale(0.005, 0.005, 0.005)
+        
+        # split panda
+        
+        split_panda = Actor('panda-model', {
+                            'walk': 'panda-walk4',
+                            })
+        split_panda.reparentTo(self.b.render)
+        split_panda.setScale(0.005, 0.005, 0.005)
+        split_panda.make_subpart("f_legs",["Bone_rf_leg_upper","Bone_lf_leg_upper"])
+        split_panda.make_subpart("r_legs",["Bone_rr_leg_upper","Bone_lr_leg_upper"])
+        split_panda.loop("walk", partName="f_legs")
+        split_panda.loop("walk", partName="r_legs")
+        split_panda.setPlayRate(5,"walk","r_legs")
+        split_panda.setPos(-2,0,0)
+        
+        
+        # gltf doesn't work?
+        
+        
         filename="./BlendFile.gltf"
         
-        my_actor=Actor(filename)
-        
+        my_actor = Actor(filename)
         my_actor.reparentTo(self.b.render)
+        my_actor.setPos(0,5,0)
         
-        my_actor.make_subpart("y_plus",["Yplus"])
-        my_actor.make_subpart("y_neg",["Ynegative"])
+        part_plus=my_actor.make_subpart("y_plus",["Yplus"])
+        part_negative=my_actor.make_subpart("y_neg",["Ynegative"])
         
-        ob = self.b.loader.loadModel(filename)
-        ob.reparentTo(self.b.render)
-           
+        #ob = self.b.loader.loadModel(filename)
+        #ob.reparentTo(self.b.render)
+        #ob.setPos(0,5,0)
+        #ob.reparentTo(my_actor)
+        #ob.play('YplusAction')
 
     def spinCameraTask(self, task):
-        d=100
-        angleDegrees = task.time * 6.0
+        d=20
+        angleDegrees = task.time * 15.0
         angleRadians = angleDegrees * (pi / 180.0)
         self.b.camera.setPos(d * sin(angleRadians), -d * cos(angleRadians), d)
         self.b.camera.setHpr(angleDegrees, -40, 0)
