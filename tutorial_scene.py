@@ -25,12 +25,10 @@ class Wrapper:
         scene.setScale(0.25, 0.25, 0.25)
         scene.setPos(-2, 42, 0)
 
-
         # Add the spinCameraTask procedure to the task manager.
         self.b.taskMgr.add(self.spinCameraTask, "SpinCameraTask")
         
         #regular panda
-        
         regular_panda = Actor('panda-model', {
                             'walk': 'panda-walk4',
                             })
@@ -41,7 +39,6 @@ class Wrapper:
         regular_panda.setScale(0.005, 0.005, 0.005)
         
         # split panda
-        
         split_panda = Actor('panda-model', {
                             'walk': 'panda-walk4',
                             })
@@ -54,24 +51,23 @@ class Wrapper:
         split_panda.setPlayRate(5,"walk","r_legs")
         split_panda.setPos(-2,0,0)
         
-        
         # gltf doesn't work?
         
-        
-        filename="./BlendFile.gltf"
+        filename="./BlendFile.glb"#tf"
         
         my_actor = Actor(filename)
         my_actor.reparentTo(self.b.render)
-        my_actor.setPos(0,5,0)
+        my_actor.setScale(0.4,0.4,0.4)
+        my_actor.setPos(0,8,1)
         
-        part_plus=my_actor.make_subpart("y_plus",["Yplus"])
-        part_negative=my_actor.make_subpart("y_neg",["Ynegative"])
+        print(my_actor.getAnimNames())
         
-        #ob = self.b.loader.loadModel(filename)
-        #ob.reparentTo(self.b.render)
-        #ob.setPos(0,5,0)
-        #ob.reparentTo(my_actor)
-        #ob.play('YplusAction')
+        my_actor.make_subpart("y_plus",["Yplus"])
+        my_actor.make_subpart("y_neg",["Ynegative"])
+        my_actor.loop('YpActionTrack',partName="y_plus")
+        my_actor.loop('YnActionTrack',partName="y_neg")
+        my_actor.setPlayRate(5,'YnActionTrack',"y_neg")
+        
 
     def spinCameraTask(self, task):
         d=20
