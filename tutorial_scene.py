@@ -27,7 +27,25 @@ class Wrapper:
 
         # Add the spinCameraTask procedure to the task manager.
         self.b.taskMgr.add(self.spinCameraTask, "SpinCameraTask")
+   
+        # gltf doesn't work?
+        self.load_example()
+        #self.load_pandas()
         
+    def load_example(self):
+        
+        filename="./new_simple.bam"
+        
+        my_actor = Actor(filename)
+        my_actor.reparentTo(self.b.render)
+        my_actor.setScale(1,1,1)
+        my_actor.setPos(-2,0,0)
+        
+        print(my_actor.getAnimNames())
+        
+        my_actor.loop('ArmatureAction')
+    
+    def load_pandas(self):
         #regular panda
         regular_panda = Actor('panda-model', {
                             'walk': 'panda-walk4',
@@ -51,24 +69,6 @@ class Wrapper:
         split_panda.setPlayRate(5,"walk","r_legs")
         split_panda.setPos(-2,0,0)
         
-        # gltf doesn't work?
-        
-        filename="./BlendFile.glb"#tf"
-        
-        my_actor = Actor(filename)
-        my_actor.reparentTo(self.b.render)
-        my_actor.setScale(0.4,0.4,0.4)
-        my_actor.setPos(0,8,1)
-        
-        print(my_actor.getAnimNames())
-        
-        my_actor.make_subpart("y_plus",["Yplus"])
-        my_actor.make_subpart("y_neg",["Ynegative"])
-        my_actor.loop('YpActionTrack',partName="y_plus")
-        my_actor.loop('YnActionTrack',partName="y_neg")
-        my_actor.setPlayRate(5,'YnActionTrack',"y_neg")
-        
-
     def spinCameraTask(self, task):
         d=20
         angleDegrees = task.time * 15.0
